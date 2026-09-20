@@ -45,7 +45,16 @@ export default class CallHandler {
       return;
     }
 
-    window.location.replace(redirectUrl);
+    // Open the target URL outside the PWA in the system browser or matching app.
+    // Using an anchor click with target="_blank" is more reliable than window.location.replace()
+    // on Android PWAs for triggering external navigation.
+    const anchor = document.createElement("a");
+    anchor.href = redirectUrl;
+    anchor.target = "_blank";
+    anchor.rel = "noopener noreferrer";
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
   }
 
   /**
